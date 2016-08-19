@@ -1,6 +1,8 @@
 // Copyright (c) 2014 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
+// Edited by Max de D. for debug purposes.
 (function() {
 'use strict';
 /*
@@ -81,6 +83,7 @@ window['Runner'] = Runner;
 var CURRENT_SPEED = 6;
 var NEXT_OBSTACLE_DIST = 600;
 var NEXT_OBSTACLE_SIZE = 20;
+var OBSTACLES_PASSED = 0;
 
 /**
  * Default game width.
@@ -1761,6 +1764,8 @@ Trex.prototype = {
     this.midair = false;
     this.speedDrop = false;
     this.jumpCount = 0;
+    NEXT_OBSTACLE_DIST = 600;
+    NEXT_OBSTACLE_SIZE = 20;
   }
 };
 
@@ -1960,18 +1965,23 @@ DistanceMeter.prototype = {
         this.digits2 = speedStr.split('');
 
         // Create a string representation of the speed
-        var speedStr = Math.floor(NEXT_OBSTACLE_DIST).toString()
+        var speedStr = NEXT_OBSTACLE_DIST.toString()
         this.digits3 = speedStr.split('');
 
         // Create a string representation of the speed
-        var speedStr = Math.floor(NEXT_OBSTACLE_SIZE).toString()
+        var speedStr = NEXT_OBSTACLE_SIZE.toString()
         this.digits4 = speedStr.split('');
+
+        // Create a string representation of the speed
+        var passedStr = OBSTACLES_PASSED.toString()
+        this.digits5 = passedStr.split('');
 
       } else {
         this.digits  = this.defaultString.split('');
         this.digits2 = this.defaultString.split('');
         this.digits3 = this.defaultString.split('');
         this.digits4 = this.defaultString.split('');
+        this.digits5 = this.defaultString.split('');
       }
 
     } else {
@@ -2001,15 +2011,19 @@ DistanceMeter.prototype = {
     }
     // Draw the digits of speed
     for (var i = this.digits2.length - 1; i >= 0; i--) {
-        this.draw(i, parseInt(this.digits2[i]), 2);
+        this.draw(5 + i - this.digits2.length, parseInt(this.digits2[i]), 2);
       }
     // Draw the digits of dist
     for (var i = this.digits3.length - 1; i >= 0; i--) {
-        this.draw(i, parseInt(this.digits3[i]), 3);
+        this.draw(5 + i - this.digits3.length, parseInt(this.digits3[i]), 3);
       }
     // Draw the digits of size
     for (var i = this.digits4.length - 1; i >= 0; i--) {
-        this.draw(i, parseInt(this.digits4[i]), 4);
+        this.draw(5 + i - this.digits4.length, parseInt(this.digits4[i]), 4);
+      }
+    // Draw the digits of passed obstacles count
+    for (var i = this.digits4.length - 1; i >= 0; i--) {
+        this.draw(5 + i - this.digits5.length, parseInt(this.digits5[i]), 5);
       }
 
     this.drawHighScore();
@@ -2048,6 +2062,7 @@ DistanceMeter.prototype = {
   reset: function() {
     this.update(0);
     this.acheivement = false;
+    OBSTACLES_PASSED = 0;
   }
 };
 
@@ -2405,6 +2420,8 @@ Horizon.prototype = {
       // Clean up existing obstacles.
       if (obstacle.remove) {
         updatedObstacles.shift();
+        OBSTACLES_PASSED ++
+
       }
     }
     this.obstacles = updatedObstacles;
