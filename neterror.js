@@ -1951,94 +1951,75 @@ DistanceMeter.prototype = {
     var paint = true;
     var playSound = false;
 
-    if (!this.acheivement) {
-      distance = this.getActualDistance(distance);
+    distance = this.getActualDistance(distance);
 
-      // Score has gone beyond the initial digit count.
-      if (distance > this.maxScore && this.maxScoreUnits ==
-        this.config.MAX_DISTANCE_UNITS) {
-        this.maxScoreUnits++;
-        this.maxScore = parseInt(this.maxScore + '9');
-      } else {
-        this.distance = 0;
-      }
-
-      if (distance > 0) {
-        // Acheivement unlocked
-        if (distance % this.config.ACHIEVEMENT_DISTANCE == 0) {
-          // Flash score and play sound.
-          this.acheivement = true;
-          this.flashTimer = 0;
-          playSound = true;
-        }
-
-        // Create a string representation of the distance with leading 0.
-        var distanceStr = (this.defaultString +
-            distance).substr(-this.maxScoreUnits);
-        this.digits = distanceStr.split('');
-
-        // Create a string representation of the speed
-        var speedStr = Math.floor(1000*CURRENT_SPEED).toString()
-        this.digits2 = speedStr.split('');
-
-        // Create a string representation of the speed
-        var speedStr = NEXT_OBSTACLE_DIST.toString()
-        this.digits3 = speedStr.split('');
-
-        // Create a string representation of the speed
-        var speedStr = NEXT_OBSTACLE_SIZE.toString()
-        this.digits4 = speedStr.split('');
-
-        // Create a string representation of the speed
-        var passedStr = OBSTACLES_PASSED.toString()
-        this.digits5 = passedStr.split('');
-
-      } else {
-        this.digits  = this.defaultString.split('');
-        this.digits2 = this.defaultString.split('');
-        this.digits3 = this.defaultString.split('');
-        this.digits4 = this.defaultString.split('');
-        this.digits5 = this.defaultString.split('');
-      }
-
+    // Score has gone beyond the initial digit count.
+    if (distance > this.maxScore && this.maxScoreUnits ==
+      this.config.MAX_DISTANCE_UNITS) {
+      this.maxScoreUnits++;
+      this.maxScore = parseInt(this.maxScore + '9');
     } else {
-      // Control flashing of the score on reaching acheivement.
-      if (this.flashIterations <= this.config.FLASH_ITERATIONS) {
-        this.flashTimer += deltaTime;
-
-        if (this.flashTimer < this.config.FLASH_DURATION) {
-          paint = false;
-        } else if (this.flashTimer >
-            this.config.FLASH_DURATION * 2) {
-          this.flashTimer = 0;
-          this.flashIterations++;
-        }
-      } else {
-        this.acheivement = false;
-        this.flashIterations = 0;
-        this.flashTimer = 0;
-      }
+      this.distance = 0;
     }
 
-    // Draw the digits of score if not flashing.
+    if (distance > 0) {
+      // Acheivement unlocked
+      if (distance % this.config.ACHIEVEMENT_DISTANCE == 0) {
+        // Flash score and play sound.
+        this.acheivement = true;
+        this.flashTimer = 0;
+        playSound = true;
+      }
+
+      // Create a string representation of the distance with leading 0.
+      var distanceStr = (this.defaultString +
+          distance).substr(-this.maxScoreUnits);
+      this.digits = distanceStr.split('');
+
+      // Create a string representation of the speed.
+      var speedStr = Math.floor(1000*CURRENT_SPEED).toString()
+      this.digits2 = speedStr.split('');
+
+      // Create a string representation of the next obstacle distance.
+      var speedStr = NEXT_OBSTACLE_DIST.toString()
+      this.digits3 = speedStr.split('');
+
+      // Create a string representation of the next obstacle size.
+      var speedStr = NEXT_OBSTACLE_SIZE.toString()
+      this.digits4 = speedStr.split('');
+
+      // Create a string representation of the passed obstacles count.
+      var passedStr = OBSTACLES_PASSED.toString()
+      this.digits5 = passedStr.split('');
+
+    } else {
+      this.digits  = this.defaultString.split('');
+      this.digits2 = this.defaultString.split('');
+      this.digits3 = this.defaultString.split('');
+      this.digits4 = this.defaultString.split('');
+      this.digits5 = this.defaultString.split('');
+    }
+
+
+    // Draw the digits of the total ran distance.
     if (paint) {
       for (var i = this.digits.length - 1; i >= 0; i--) {
         this.draw(i, parseInt(this.digits[i]), 0);
       }
     }
-    // Draw the digits of speed
+    // Draw the digits of speed.
     for (var i = this.digits2.length - 1; i >= 0; i--) {
         this.draw(5 + i - this.digits2.length, parseInt(this.digits2[i]), 2);
       }
-    // Draw the digits of dist
+    // Draw the digits of dist.
     for (var i = this.digits3.length - 1; i >= 0; i--) {
         this.draw(5 + i - this.digits3.length, parseInt(this.digits3[i]), 3);
       }
-    // Draw the digits of size
+    // Draw the digits of size.
     for (var i = this.digits4.length - 1; i >= 0; i--) {
         this.draw(5 + i - this.digits4.length, parseInt(this.digits4[i]), 4);
       }
-    // Draw the digits of passed obstacles count
+    // Draw the digits of passed obstacles count.
     for (var i = this.digits4.length - 1; i >= 0; i--) {
         this.draw(5 + i - this.digits5.length, parseInt(this.digits5[i]), 5);
       }
