@@ -296,7 +296,24 @@ Runner.prototype = {
    * Load and decode base 64 encoded sounds.
    */
   loadSounds: function() {
+    this.audioContext = new AudioContext();
+
+    var resourceTemplate =
+        document.getElementById(this.config.RESOURCE_TEMPLATE_ID).content;
+
+    for (var sound in Runner.sounds) {
+      var soundSrc =
+          resourceTemplate.getElementById(Runner.sounds[sound]).src;
+      soundSrc = soundSrc.substr(soundSrc.indexOf(',') + 1);
+      var buffer = decodeBase64ToArrayBuffer(soundSrc);
+
+      // Async, so no guarantee of order in array.
+      this.audioContext.decodeAudioData(buffer, function(index, audioData) {
+          this.soundFx[index] = audioData;
+        }.bind(this, sound));
+    }
   },
+
 
   /**
    * Sets the game speed. Adjust the speed accordingly if on a smaller screen.
