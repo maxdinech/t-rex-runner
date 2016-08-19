@@ -75,6 +75,14 @@ window['Runner'] = Runner;
 
 
 /**
+ * Debug infos.
+ * @var
+ */
+var CURRENT_SPEED = 6;
+var NEXT_OBSTACLE_DIST = 600;
+var NEXT_OBSTACLE_SIZE = 20;
+
+/**
  * Default game width.
  * @const
  */
@@ -218,7 +226,8 @@ Runner.prototype = {
    * @return {boolean}
    */
   isDisabled: function() {
-    return loadTimeData && loadTimeData.valueExists('disabledEasterEgg');
+    // return loadTimeData && loadTimeData.valueExists('disabledEasterEgg');
+    return true
   },
 
   /**
@@ -471,9 +480,11 @@ Runner.prototype = {
    */
   update: function() {
     
-    if ((10 * this.currentSpeed - Math.floor(10 * this.currentSpeed) < 0.01) && this.currentSpeed != 6){
-      console.log("speed : ", Math.floor(100 * this.currentSpeed) / 100)
-    }
+    // if ((10 * this.currentSpeed - Math.floor(10 * this.currentSpeed) < 0.01) && this.currentSpeed != 6){
+    //   console.log("speed : ", Math.floor(100 * this.currentSpeed) / 100)
+    // }
+
+    CURRENT_SPEED = this.currentSpeed
 
     this.drawPending = false;
 
@@ -1862,23 +1873,19 @@ DistanceMeter.prototype = {
    * @param {number} value Digit value 0-9.
    * @param {boolean} opt_highScore Whether drawing the high score.
    */
-  draw: function(digitPos, value, opt_highScore) {
+  draw: function(digitPos, value, line, opt_highScore) {
     var sourceWidth = DistanceMeter.dimensions.WIDTH;
     var sourceHeight = DistanceMeter.dimensions.HEIGHT;
     var sourceX = DistanceMeter.dimensions.WIDTH * value;
     var sourceY = 0;
 
     var targetX = digitPos * DistanceMeter.dimensions.DEST_WIDTH;
-    var targetY = this.y;
+    var targetY = this.y + 15 * line;
     var targetWidth = DistanceMeter.dimensions.WIDTH;
     var targetHeight = DistanceMeter.dimensions.HEIGHT;
 
     // For high DPI we 2x source values.
-    if (IS_HIDPI) {
-      sourceWidth *= 2;
-      sourceHeight *= 2;
-      sourceX *= 2;
-    }
+    if (IS_HIDPI) {sourceWidth *= 2; sourceHeight *= 2; sourceX *= 2;}
 
     sourceX += this.spritePos.x;
     sourceY += this.spritePos.y;
@@ -1947,9 +1954,26 @@ DistanceMeter.prototype = {
         var distanceStr = (this.defaultString +
             distance).substr(-this.maxScoreUnits);
         this.digits = distanceStr.split('');
+
+        // Create a string representation of the speed
+        var speedStr = Math.floor(1000*CURRENT_SPEED).toString()
+        this.digits2 = speedStr.split('');
+
+        // Create a string representation of the speed
+        var speedStr = Math.floor(NEXT_OBSTACLE_DIST).toString()
+        this.digits3 = speedStr.split('');
+
+        // Create a string representation of the speed
+        var speedStr = Math.floor(NEXT_OBSTACLE_SIZE).toString()
+        this.digits4 = speedStr.split('');
+
       } else {
-        this.digits = this.defaultString.split('');
+        this.digits  = this.defaultString.split('');
+        this.digits2 = this.defaultString.split('');
+        this.digits3 = this.defaultString.split('');
+        this.digits4 = this.defaultString.split('');
       }
+
     } else {
       // Control flashing of the score on reaching acheivement.
       if (this.flashIterations <= this.config.FLASH_ITERATIONS) {
@@ -1969,12 +1993,24 @@ DistanceMeter.prototype = {
       }
     }
 
-    // Draw the digits if not flashing.
+    // Draw the digits of score if not flashing.
     if (paint) {
       for (var i = this.digits.length - 1; i >= 0; i--) {
-        this.draw(i, parseInt(this.digits[i]));
+        this.draw(i, parseInt(this.digits[i]), 0);
       }
     }
+    // Draw the digits of speed
+    for (var i = this.digits2.length - 1; i >= 0; i--) {
+        this.draw(i, parseInt(this.digits2[i]), 2);
+      }
+    // Draw the digits of dist
+    for (var i = this.digits3.length - 1; i >= 0; i--) {
+        this.draw(i, parseInt(this.digits3[i]), 3);
+      }
+    // Draw the digits of size
+    for (var i = this.digits4.length - 1; i >= 0; i--) {
+        this.draw(i, parseInt(this.digits4[i]), 4);
+      }
 
     this.drawHighScore();
 
@@ -1988,7 +2024,7 @@ DistanceMeter.prototype = {
     this.canvasCtx.save();
     this.canvasCtx.globalAlpha = .8;
     for (var i = this.highScore.length - 1; i >= 0; i--) {
-      this.draw(i, parseInt(this.highScore[i], 10), true);
+      this.draw(i, parseInt(this.highScore[i], 10), 0, true);
     }
     this.canvasCtx.restore();
   },
@@ -2351,8 +2387,12 @@ Horizon.prototype = {
   updateObstacles: function(deltaTime, currentSpeed) {
     // Infos sur l'Obs le plus proche
     if (this.obstacles.length > 0) {
-      var nextObstacle = this.obstacles[0];
-      console.log("Nearest Cactus :    distance ", nextObstacle.xPos, "   size ", nextObstacle.width)
+      NEXT_OBSTACLE_DIST = this.obstacles[0].xPos
+      NEXT_OBSTACLE_SIZE = this.obstacles[0].width
+      // console.log("Obstacle :    distance ", NEXT_OBSTACLE_DIST, "   size ", NEXT_OBSTACLE_SIZE)
+    } else {
+      NEXT_OBSTACLE_DIST = 600
+      NEXT_OBSTACLE_SIZE = 20
     }
     
     // Obstacles, move to Horizon layer.
