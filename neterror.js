@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 (function() {
 'use strict';
-/**
+/*
  * T-Rex runner.
  * @param {string} outerContainerId Outer containing element id.
  * @param {Object} opt_config
@@ -472,7 +472,7 @@ Runner.prototype = {
   update: function() {
     
     if ((10 * this.currentSpeed - Math.floor(10 * this.currentSpeed) < 0.01) && this.currentSpeed != 6){
-      console.log("vitesse : ", Math.floor(100 * this.currentSpeed) / 100)
+      console.log("speed : ", Math.floor(100 * this.currentSpeed) / 100)
     }
 
     this.drawPending = false;
@@ -2356,7 +2356,7 @@ Horizon.prototype = {
     // Infos sur l'Obs le plus proche
     if (this.obstacles.length > 0) {
       var nextObstacle = this.obstacles[0];
-      console.log("distance : ", nextObstacle.xPos, " taille : ", nextObstacle.width)
+      console.log("Nearest Cactus :    distance ", nextObstacle.xPos, "   size ", nextObstacle.width)
     }
     
     // Obstacles, move to Horizon layer.
