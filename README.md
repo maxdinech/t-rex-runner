@@ -2,6 +2,6 @@
 
 My goal is to make an AI to beat this game, using Neural Networks.
 
-For that, I need to have a live access to variables such as T-Rex's speed and the incoming cactusdistance and size.
+For that, I need to have a live access to variables such as T-Rex's speed and the incoming cactus distance and size.
 
-Too see these informations when playing, open the browser console, and hit space!
+So, just below the score digits : *Speed*, *distance* and *size*
