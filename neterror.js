@@ -1305,11 +1305,7 @@ Obstacle.prototype = {
     var minGap = Math.round(this.width * speed +
           this.typeConfig.minGap * gapCoefficient);
     var maxGap = Math.round(minGap * Obstacle.MAX_GAP_COEFFICIENT);
-    var gap = getRandomNum(minGap, maxGap);
-    
-    console.log("distance entre deux : ", gap);
-
-    return gap;
+    return getRandomNum(minGap, maxGap);
   },
 
   /**
