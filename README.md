@@ -6,4 +6,6 @@ For that, I need to have a live access to variables such as T-Rex's speed and th
 
 As the obstacle apparition is random, the ran distance is not a valid criter to evaluate an AI. I added an obstacles jumped counter.
 
-So, just below the score digits : *Speed*, *distance*, *size*, and *jumped obstacles*.
+![T-Rex Running](doc.png)
+
+Below the score digits : *Speed*, *distance*, *size*, and *jumped obstacles*.
