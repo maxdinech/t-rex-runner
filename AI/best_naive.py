@@ -13,7 +13,7 @@ def naive_AI(jump_dist):
     print('   ║ ' + str(current).rjust(2) + '/' + str(passes) + '           Press Ctrl-C to quit.║')
     print('   ╚╦════════════════════════════════════╦╝')
     try:
-        while True and not crashed:
+        while not crashed:
             speed, obs_dist, obs_size, passed, score, crashed = getVars()
             if obs_dist < jump_dist or score == 0:
                 jump()
