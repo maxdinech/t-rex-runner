@@ -1897,14 +1897,14 @@ DistanceMeter.prototype = {
    * @param {number} value Digit value 0-9.
    * @param {boolean} opt_highScore Whether drawing the high score.
    */
-  draw: function(digitPos, value, line, opt_highScore) {
+  draw: function(digitPos, value, opt_highScore) {
     var sourceWidth = DistanceMeter.dimensions.WIDTH;
     var sourceHeight = DistanceMeter.dimensions.HEIGHT;
     var sourceX = DistanceMeter.dimensions.WIDTH * value;
     var sourceY = 0;
 
     var targetX = digitPos * DistanceMeter.dimensions.DEST_WIDTH;
-    var targetY = this.y + 15 * line;
+    var targetY = this.y;
     var targetWidth = DistanceMeter.dimensions.WIDTH;
     var targetHeight = DistanceMeter.dimensions.HEIGHT;
 
@@ -1997,35 +1997,15 @@ DistanceMeter.prototype = {
 
     } else {
       this.digits  = this.defaultString.split('');
-      this.digits2 = this.defaultString.split('');
-      this.digits3 = this.defaultString.split('');
-      this.digits4 = this.defaultString.split('');
-      this.digits5 = this.defaultString.split('');
     }
 
 
     // Draw the digits of the total ran distance.
     if (paint) {
       for (var i = this.digits.length - 1; i >= 0; i--) {
-        this.draw(i, parseInt(this.digits[i]), 0);
+        this.draw(i, parseInt(this.digits[i]));
       }
     }
-    // Draw the digits of speed.
-    for (var i = this.digits2.length - 1; i >= 0; i--) {
-        this.draw(5 + i - this.digits2.length, parseInt(this.digits2[i]), 2);
-      }
-    // Draw the digits of dist.
-    for (var i = this.digits3.length - 1; i >= 0; i--) {
-        this.draw(5 + i - this.digits3.length, parseInt(this.digits3[i]), 3);
-      }
-    // Draw the digits of size.
-    for (var i = this.digits4.length - 1; i >= 0; i--) {
-        this.draw(5 + i - this.digits4.length, parseInt(this.digits4[i]), 4);
-      }
-    // Draw the digits of passed obstacles count.
-    for (var i = this.digits4.length - 1; i >= 0; i--) {
-        this.draw(5 + i - this.digits5.length, parseInt(this.digits5[i]), 5);
-      }
 
     this.drawHighScore();
 
@@ -2039,7 +2019,7 @@ DistanceMeter.prototype = {
     this.canvasCtx.save();
     this.canvasCtx.globalAlpha = .8;
     for (var i = this.highScore.length - 1; i >= 0; i--) {
-      this.draw(i, parseInt(this.highScore[i], 10), 0, true);
+      this.draw(i, parseInt(this.highScore[i], 10), true);
     }
     this.canvasCtx.restore();
   },
