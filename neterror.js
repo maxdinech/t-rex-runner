@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 // Edited by Max de D. for debug purposes.
+
 (function() {
 'use strict';
 /*
