@@ -1,7 +1,6 @@
-# T-Rex Runner - Neural Network AI
+# T-Rex Runner - Neural Network + GA  AI
 
-
-## Needed variables
+## Introduction
 
 This project's goal is to create an AI to beat Chromium's T-Rex Runner game.
 
@@ -26,13 +25,13 @@ Those variables are displayed in real time on this debugged T-Rex Runner game, b
 
 ### 1. The naive way
 
-    file AI/naive.py
+See `AI/naive.py`.
 
 The simplest way to proceed is to make the dino jump when the nearest obstacle is clos(about 150px away). This works, but not for long : I have not yet managed to reach a score over 1k using this method.
 
 ### 2. The analytic way
 
-    file AI/analytic.py
+See `AI/analytic.py`.
 
 Another possibility is to find an application taking in parameters the speed, dist, width, and returning 1 (UP) or 0 (nothing), i.e
 
@@ -42,7 +41,7 @@ The problem is in determining the parameters' coefficient, and the function type
 
 ### 3. Genetic Algorithm
 
-    file AI/genetic.py
+See `AI/genetic.py`
 
 To determine such coefficients, a genetic algorithm (GA) could be a good solution. We fix the fuction type as multilinear, i.e.
 
