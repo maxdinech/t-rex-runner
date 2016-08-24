@@ -78,12 +78,13 @@ window['Runner'] = Runner;
 
 /**
  * Debug infos.
- * @var
+ * @cookies
  */
-var CURRENT_SPEED = 6;
-var NEXT_OBSTACLE_DIST = 600;
-var NEXT_OBSTACLE_SIZE = 20;
-var OBSTACLES_PASSED = 0;
+cookie.set('speed', 6);
+cookie.set('obs_dist', 600);
+cookie.set('obs_size', 20);
+cookie.set('passed', 0);
+
 
 /**
  * Default game width.
@@ -500,11 +501,9 @@ Runner.prototype = {
    */
   update: function() {
     
-    // if ((10 * this.currentSpeed - Math.floor(10 * this.currentSpeed) < 0.01) && this.currentSpeed != 6){
-    //   console.log("speed : ", Math.floor(100 * this.currentSpeed) / 100)
-    // }
-
-    CURRENT_SPEED = this.currentSpeed
+    // CURRENT_SPEED = this.currentSpeed
+    cookie.set('speed', this.currentSpeed);
+    // console.log(cookie('speed'))
 
     this.drawPending = false;
 
@@ -1781,8 +1780,8 @@ Trex.prototype = {
     this.midair = false;
     this.speedDrop = false;
     this.jumpCount = 0;
-    NEXT_OBSTACLE_DIST = 600;
-    NEXT_OBSTACLE_SIZE = 20;
+    cookie.set('obs_dist', 600);
+    cookie.set('obs_size', 20);
   }
 };
 
@@ -1977,19 +1976,20 @@ DistanceMeter.prototype = {
       this.digits = distanceStr.split('');
 
       // Create a string representation of the speed.
-      var speedStr = Math.floor(1000*CURRENT_SPEED).toString()
+      // var speedStr = Math.floor(1000*CURRENT_SPEED).toString()
+      var speedStr = Math.floor(1000*cookie('speed')).toString()
       this.digits2 = speedStr.split('');
 
       // Create a string representation of the next obstacle distance.
-      var speedStr = NEXT_OBSTACLE_DIST.toString()
+      var speedStr = cookie('obs_dist').toString()
       this.digits3 = speedStr.split('');
 
       // Create a string representation of the next obstacle size.
-      var speedStr = NEXT_OBSTACLE_SIZE.toString()
+      var speedStr = cookie('obs_size').toString()
       this.digits4 = speedStr.split('');
 
       // Create a string representation of the passed obstacles count.
-      var passedStr = OBSTACLES_PASSED.toString()
+      var passedStr = cookie('passed').toString()
       this.digits5 = passedStr.split('');
 
     } else {
@@ -2060,7 +2060,7 @@ DistanceMeter.prototype = {
   reset: function() {
     this.update(0);
     this.acheivement = false;
-    OBSTACLES_PASSED = 0;
+    cookie.set('passed', 0);
   }
 };
 
@@ -2400,12 +2400,11 @@ Horizon.prototype = {
   updateObstacles: function(deltaTime, currentSpeed) {
     // Infos sur l'Obs le plus proche
     if (this.obstacles.length > 0) {
-      NEXT_OBSTACLE_DIST = this.obstacles[0].xPos
-      NEXT_OBSTACLE_SIZE = this.obstacles[0].width
-      // console.log("Obstacle :    distance ", NEXT_OBSTACLE_DIST, "   size ", NEXT_OBSTACLE_SIZE)
+      cookie.set('obs_dist', this.obstacles[0].xPos)
+      cookie.set('obs_size', this.obstacles[0].width)
     } else {
-      NEXT_OBSTACLE_DIST = 600
-      NEXT_OBSTACLE_SIZE = 20
+      cookie.set('obs_dist', 600)
+      cookie.set('obs_size', 20)
     }
     
     // Obstacles, move to Horizon layer.
@@ -2418,7 +2417,7 @@ Horizon.prototype = {
       // Clean up existing obstacles.
       if (obstacle.remove) {
         updatedObstacles.shift();
-        OBSTACLES_PASSED ++
+        cookie.set('passed', parseInt(cookie('passed')) + 1)
 
       }
     }
