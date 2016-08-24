@@ -3,7 +3,7 @@
 from master import *
 
 
-def analytic_IA(jump_dist):
+def analytic_AI(jump_dist):
     driver.get('http://localhost/t-rex-runner/')
     print('\n')
     print('    ╔════════════════════════════════════╗')
@@ -14,7 +14,7 @@ def analytic_IA(jump_dist):
     print('   ╚╦════════════════════════════════════╦╝')
     try:
         while True:
-            speed, obs_dist, obs_size, passed = getVars()
+            speed, obs_dist, obs_size, passed, score, crashed = getVars()
             if obs_dist + obs_size + 10*(speed - 6) < jump_dist:
                 jump()
             dispStr = ""
@@ -28,4 +28,4 @@ def analytic_IA(jump_dist):
         print '\n'
 
 
-analytic_IA(210)
+analytic_AI(210)

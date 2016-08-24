@@ -2,7 +2,11 @@
 
 from master import *
 
-def naive_IA(jump_dist):
+highscore = 0
+total = 0
+average = 0
+
+def naive_AI(jump_dist):
     driver.get('http://localhost/t-rex-runner/')
     speed, obs_dist, obs_size, passed, score, crashed = getVars()
     print('\n')
@@ -13,18 +17,28 @@ def naive_IA(jump_dist):
     print('   ║                 Press Ctrl-C to quit.║')
     print('   ╚╦════════════════════════════════════╦╝')
     try:
-        while True:
+        while True and not crashed:
             speed, obs_dist, obs_size, passed, score, crashed = getVars()
-            if obs_dist < jump_dist:
+            if obs_dist < jump_dist or score == 0:
                 jump()
             dispStr = ""
-            dispStr += '   ║ SPEED: ' + str(1000*speed).rjust(5)
-            dispStr += '  DIST: ' + str(obs_dist).rjust(3)
-            dispStr += '  SIZE: ' + str(obs_size).rjust(2) + " ║"
+            dispStr += '   ║ ACTUAL: ' + str(score).rjust(4)
+            dispStr += '  TOP: ' + str(highscore).rjust(4)
+            dispStr += '  AVG: ' + str(average).rjust(4) + " ║"
             print dispStr,
             print '\b' * (len(dispStr) + 2),
             sys.stdout.flush()
     except KeyboardInterrupt:
         print '\n'
+    return score
 
-naive_IA(170)
+def test_AI(jump_dist, tries = 20):
+    global highscore, total, average
+    for i in range(1, 1 + tries):
+        print(chr(27) + "[2J")
+        score = naive_AI(jump_dist)
+        total += score
+        average = int(total/float(i))
+        highscore = max(highscore, score)
+
+test_AI(170)

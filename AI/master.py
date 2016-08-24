@@ -15,7 +15,7 @@ def jump():
 
 def getVars():
     cookies = driver.get_cookies()
-    for i in range(4):
+    for i in range(6):
         cookie = cookies[i]
         if cookie['name'] == u'speed':
             speed = float(cookie['value'])
@@ -25,7 +25,11 @@ def getVars():
             obs_size = int(cookie['value'])
         if cookie['name'] == u'passed':
             passed = int(cookie['value'])
-    return speed, obs_dist, obs_size, passed
+        if cookie['name'] == u'score':
+            score = int(cookie['value'])
+        if cookie['name'] == u'crashed':
+            crashed = (cookie['value'] == u'true')
+    return speed, obs_dist, obs_size, passed, score, crashed
 
 
 def printVars(speed, obs_dist, obs_size, passed):
