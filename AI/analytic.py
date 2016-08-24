@@ -17,13 +17,13 @@ def analytic_IA(jump_dist):
             speed, obs_dist, obs_size, passed = getVars()
             if obs_dist + obs_size + 10*(speed - 6) < jump_dist:
                 jump()
-            # dispStr = ""
-            # dispStr += '   ║ SPEED: ' + str(1000*speed).rjust(5)
-            # dispStr += '  DIST: ' + str(obs_dist).rjust(3)
-            # dispStr += '  SIZE: ' + str(obs_size).rjust(2) + " ║"
-            # print dispStr,
-            # print '\b' * (len(dispStr) + 2),
-            # sys.stdout.flush()
+            dispStr = ""
+            dispStr += '   ║ SPEED: ' + str(1000*speed).rjust(5)
+            dispStr += '  DIST: ' + str(obs_dist).rjust(3)
+            dispStr += '  SIZE: ' + str(obs_size).rjust(2) + " ║"
+            print dispStr,
+            print '\b' * (len(dispStr) + 2),
+            sys.stdout.flush()
     except KeyboardInterrupt:
         print '\n'
 
