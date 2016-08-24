@@ -2,12 +2,12 @@
 
 from master import *
 
-def naive_IA(jump_dist):
+def naive_AI(jump_dist):
     driver.get('http://localhost/t-rex-runner/')
     speed, obs_dist, obs_size, passed, score, crashed = getVars()
     print('\n')
     print('    ╔════════════════════════════════════╗')
-    print('    ║T-Rex:        NAIVE IA          v1.0║')
+    print('    ║T-Rex:        NAIVE AI          v1.0║')
     print('   ╔╩════════════════════════════════════╩╗')
     print('   ║ Jump trigger dist: ' + str(jump_dist) + ' px            ║')
     print('   ║                 Press Ctrl-C to quit.║')
@@ -27,4 +27,4 @@ def naive_IA(jump_dist):
     except KeyboardInterrupt:
         print '\n'
 
-naive_IA(170)
+naive_AI(170)
