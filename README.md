@@ -1,4 +1,4 @@
-# T-Rex Runner - Neural Network + GA  AI
+# T-Rex Runner - Neural Network AI
 
 ## Introduction
 
