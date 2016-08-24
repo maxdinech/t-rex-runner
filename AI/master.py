@@ -1,10 +1,10 @@
 import pyautogui as pg
-import time, os, logging, sys, random, copy, time
+import time, os, logging, sys, random, copy
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-driver = webdriver.Chrome()
+driver = webdriver.Opera()
 driver.get("http://localhost/t-rex-runner/")
 
 
