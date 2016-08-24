@@ -80,10 +80,10 @@ window['Runner'] = Runner;
  * Debug infos.
  * @global vars
  */
-sessionStorage.setItem('speed', 6);
-sessionStorage.setItem('obs_dist', 600);
-sessionStorage.setItem('obs_size', 20);
-sessionStorage.setItem('passed', 0);
+cookie.set('speed', 6);
+cookie.set('obs_dist', 600);
+cookie.set('obs_size', 20);
+cookie.set('passed', 0);
 
 
 /**
@@ -501,7 +501,7 @@ Runner.prototype = {
    */
   update: function() {
     
-    sessionStorage.setItem('speed', this.currentSpeed);
+    cookie.set('speed', this.currentSpeed);
 
     this.drawPending = false;
 
@@ -1778,8 +1778,8 @@ Trex.prototype = {
     this.midair = false;
     this.speedDrop = false;
     this.jumpCount = 0;
-    sessionStorage.setItem('obs_dist', 600);
-    sessionStorage.setItem('obs_size', 20);
+    cookie.set('obs_dist', 600);
+    cookie.set('obs_size', 20);
   }
 };
 
@@ -1974,19 +1974,19 @@ DistanceMeter.prototype = {
       this.digits = distanceStr.split('');
 
       // Create a string representation of the speed.
-      var speedStr = Math.floor(1000*sessionStorage.getItem('speed')).toString()
+      var speedStr = Math.floor(1000*cookie('speed')).toString()
       this.digits2 = speedStr.split('');
 
       // Create a string representation of the next obstacle distance.
-      var speedStr = sessionStorage.getItem('obs_dist').toString()
+      var speedStr = cookie('obs_dist').toString()
       this.digits3 = speedStr.split('');
 
       // Create a string representation of the next obstacle size.
-      var speedStr = sessionStorage.getItem('obs_size').toString()
+      var speedStr = cookie('obs_size').toString()
       this.digits4 = speedStr.split('');
 
       // Create a string representation of the passed obstacles count.
-      var passedStr = sessionStorage.getItem('passed').toString()
+      var passedStr = cookie('passed').toString()
       this.digits5 = passedStr.split('');
 
     } else {
@@ -2057,7 +2057,7 @@ DistanceMeter.prototype = {
   reset: function() {
     this.update(0);
     this.acheivement = false;
-    sessionStorage.setItem('passed', 0);
+    cookie.set('passed', 0);
   }
 };
 
@@ -2397,11 +2397,11 @@ Horizon.prototype = {
   updateObstacles: function(deltaTime, currentSpeed) {
     // Infos sur l'Obs le plus proche
     if (this.obstacles.length > 0) {
-      sessionStorage.setItem('obs_dist', this.obstacles[0].xPos)
-      sessionStorage.setItem('obs_size', this.obstacles[0].width)
+      cookie.set('obs_dist', this.obstacles[0].xPos)
+      cookie.set('obs_size', this.obstacles[0].width)
     } else {
-      sessionStorage.setItem('obs_dist', 600)
-      sessionStorage.setItem('obs_size', 20)
+      cookie.set('obs_dist', 600)
+      cookie.set('obs_size', 20)
     }
     
     // Obstacles, move to Horizon layer.
@@ -2414,7 +2414,7 @@ Horizon.prototype = {
       // Clean up existing obstacles.
       if (obstacle.remove) {
         updatedObstacles.shift();
-        sessionStorage.setItem('passed', parseInt(sessionStorage.getItem('passed')) + 1)
+        cookie.set('passed', parseInt(cookie('passed')) + 1)
 
       }
     }
