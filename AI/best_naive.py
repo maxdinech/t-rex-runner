@@ -2,10 +2,6 @@
 
 from master import *
 
-highscore = 0
-total = 0
-average = 0
-
 def naive_AI(jump_dist):
     driver.get('http://localhost/t-rex-runner/')
     speed, obs_dist, obs_size, passed, score, crashed = getVars()
@@ -14,7 +10,7 @@ def naive_AI(jump_dist):
     print('    ║T-Rex:        NAIVE IA          v1.0║')
     print('   ╔╩════════════════════════════════════╩╗')
     print('   ║ Jump trigger dist: ' + str(jump_dist) + ' px            ║')
-    print('   ║                 Press Ctrl-C to quit.║')
+    print('   ║ ' + str(current).rjust(2) + '/' + str(passes) + '           Press Ctrl-C to quit.║')
     print('   ╚╦════════════════════════════════════╦╝')
     try:
         while True and not crashed:
@@ -32,13 +28,33 @@ def naive_AI(jump_dist):
         print '\n'
     return score
 
-def test_AI(jump_dist, tries = 20):
+
+def test_dist_AI(jump_dist, tries = 20):
     global highscore, total, average
-    for i in range(1, 1 + tries):
+    global current
+    for j in range(1, 1 + tries):
+        current = j
         print(chr(27) + "[2J")
         score = naive_AI(jump_dist)
         total += score
-        average = int(total/float(i))
+        average = int(total/float(j))
         highscore = max(highscore, score)
+    return highscore, average
 
-test_AI(170)
+
+def test_AI(tries = 20):
+    global highscore, total, average
+    global passes
+    passes = tries
+    naive_scores = []
+    for i in [140, 150, 160, 165, 170, 175, 180, 185, 190, 200]:
+        highscore, total, average = 0, 0, 0
+        naive_scores += [i, test_dist_AI(i, tries)]
+    print(chr(27) + "[2J")
+    print(naive_scores)
+
+
+highscore, total, average = 0, 0, 0
+current = 0
+passes = 0
+test_AI(20)
