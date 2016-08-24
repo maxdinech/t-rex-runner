@@ -84,6 +84,8 @@ cookie.set('speed', 6);
 cookie.set('obs_dist', 600);
 cookie.set('obs_size', 20);
 cookie.set('passed', 0);
+cookie.set('score', 0);
+cookie.set('crashed', false);
 
 
 /**
@@ -742,6 +744,7 @@ Runner.prototype = {
 
     this.stop();
     this.crashed = true;
+    cookie.set('crashed', true);
     this.distanceMeter.acheivement = false;
 
     this.tRex.update(100, Trex.status.CRASHED);
@@ -788,6 +791,7 @@ Runner.prototype = {
       this.runningTime = 0;
       this.activated = true;
       this.crashed = false;
+      cookie.set('crashed', false);
       this.distanceRan = 0;
       this.setSpeed(this.config.SPEED);
 
@@ -1949,6 +1953,7 @@ DistanceMeter.prototype = {
     var playSound = false;
 
     distance = this.getActualDistance(distance);
+    cookie.set('score', distance);
 
     // Score has gone beyond the initial digit count.
     if (distance > this.maxScore && this.maxScoreUnits ==
