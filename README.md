@@ -16,22 +16,17 @@ And to evaluate an IA's performance:
 
 *(As the obstacle apparition rate is random, the ran distance is not a good evaluation criter)*
 
-Those variables are displayed in real time on this debugged T-Rex Runner game, below the score:
+Those variables are displayed in real time on the debugged T-Rex Runner game (`neterror.debug.js`), below the score:
 
 ![T-Rex Running](images/doc2.png)
-
 
 ## Coding the AI
 
 ### 1. The naive way
 
-See `AI/naive.py`.
-
 The simplest way to proceed is to make the dino jump when the nearest obstacle is clos(about 150px away). This works, but not for long : I have not yet managed to reach a score over 1k using this method.
 
 ### 2. The analytic way
-
-See `AI/analytic.py`.
 
 Another possibility is to find an application taking in parameters the speed, dist, width, and returning 1 (UP) or 0 (nothing), i.e
 
@@ -47,8 +42,20 @@ To determine such coefficients, a genetic algorithm (GA) could be a good solutio
 
     f(s, d, w) = a0*s + a1*d + a2*w)
 
-This seems a good solution but fixing the function type can be a problem in more complicated examples
+Here is a screenshot of the GA running:
+
+![T-Rex Running - GA](images/genetic.png)
 
 ### 4. Neural Networks
 
-Bla-bla-bla
+Yet to come
+
+## Required dependencies
+
+In order to run the AI files, the following python packages are required :
+
+- numpy
+- pyautogui
+- selenium
+
+And selenium needs its own Chrome/Chromium driver : see https://sites.google.com/a/chromium.org/chromedriver/downloads
