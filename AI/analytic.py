@@ -3,19 +3,19 @@
 from master import *
 
 
-def analytic_AI(jump_dist):
+def analytic_AI(jump_dist, speed_coef):
     driver.get('http://localhost/t-rex-runner/')
     print('\n')
     print('    ╔════════════════════════════════════╗')
     print('    ║T-Rex:       ANALYTIC IA        v2.0║')
     print('   ╔╩════════════════════════════════════╩╗')
-    print('   ║ Eq : Jump if D + W 10*(S-6) + < ' + str(jump_dist)+ '  ║')
+    print('   ║ Eq : Jump if D + W '+ str(speed_coef).rjust(3) +'(S-6) + < ' + str(jump_dist)+ '  ║')
     print('   ║                 Press Ctrl-C to quit.║')
     print('   ╚╦════════════════════════════════════╦╝')
     try:
         while True:
             speed, obs_dist, obs_size, passed, score, crashed = getVars()
-            if obs_dist + obs_size + 10*(speed - 6) < jump_dist:
+            if obs_dist + obs_size + speed_coef*(speed - 6) < jump_dist:
                 jump()
             dispStr = ""
             dispStr += '   ║ SPEED: ' + str(1000*speed).rjust(5)
@@ -28,4 +28,4 @@ def analytic_AI(jump_dist):
         print '\n'
 
 
-analytic_AI(210)
+analytic_AI(210, -15)
