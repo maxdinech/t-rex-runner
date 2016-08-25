@@ -26,7 +26,7 @@ def mutate(indiv):
 
 def crossover(indiv1, indiv2):
     global gen_no
-    return [(indiv1[0]+indiv2[0])/2.,(indiv1[0]+indiv2[0])/2.] + [str(gen_no) + 'co']
+    return [(indiv1[0]+indiv2[0])/2.,(indiv1[1]+indiv2[1])/2.] + [str(gen_no) + 'co']
 
 
 def randIndiv():
