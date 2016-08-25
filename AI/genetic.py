@@ -100,7 +100,7 @@ def nextGen(generation):
     print('       ║   4 : '+ str_tab[4] +'    8 : '+ str_tab[8] +'    12: '+ str_tab[12] +'   ║')
     print('       ╚╦════════════════════════════════════╦╝')
     time.sleep(5)
-    os.system('scrot genetic/tab_gen_'+ str(gen_no) +'.png')
+    # os.system('scrot genetic/tab_gen_'+ str(gen_no) +'.png')
     # Choix des 4 parents
     eval_tab = [i**4 for i in eval_tab]  # On accentue les meilleurs
     eval_tab_norm = [float(i)/sum(eval_tab) for i in eval_tab]
