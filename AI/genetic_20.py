@@ -121,9 +121,8 @@ def nextGen(generation):
     nextGeneration = parents[:]
     # Ajout des c-o
     for i in range(5):
-        for j in range(5):
-            if i != j:
-                nextGeneration += [crossover(parents[i], parents[j])]
+        for j in range(i+1, 5):
+            nextGeneration += [crossover(parents[i], parents[j])]
     # Mutation parents et c-o
     nextGeneration = [mutate(i) for i in nextGeneration]
     # Ajout des rd
