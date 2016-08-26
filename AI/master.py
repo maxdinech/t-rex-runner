@@ -18,7 +18,6 @@ def jump():
     # actions.perform()
 
 
-
 def getVars():
     cookies = driver.get_cookies()
     speed, obs_dist, obs_size, passed, score, crashed = 0, 0, 0, 0, 0, 0
@@ -42,6 +41,7 @@ def getVars():
 def write(str):
     sys.stdout.write(str)
     sys.stdout.flush()
+
 
 def printVars(speed, obs_dist, obs_size):
     dispStr = ""
