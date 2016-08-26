@@ -215,7 +215,7 @@ def nextGen(generation):
     return nextGeneration
 
 
-def EVOLUTION(gen_number = 20):
+def EVOLUTION(gen_number = 50):
     global max_score
     driver.get(url)
     gen = randGen(20)
