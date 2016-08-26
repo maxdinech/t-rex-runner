@@ -64,8 +64,7 @@ def evalIndiv(indiv):
         dispStr += '        ║ SCORE: ' + str(score).rjust(4)
         dispStr += '  SPEED: ' + (str(speed) + "0000")[:5]
         dispStr += '  JMP:' + str(passed).rjust(3) + " ║"
-        print dispStr, '\r',
-        sys.stdout.flush()
+        write(dispStr + '\r')
     return score
 
 

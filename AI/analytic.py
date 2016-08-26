@@ -21,10 +21,9 @@ def analytic_AI(jump_dist, speed_coef):
             dispStr += '    ║ SPEED: ' + str(1000*speed).rjust(5)
             dispStr += '  DIST: ' + str(obs_dist).rjust(3)
             dispStr += '  SIZE: ' + str(obs_size).rjust(2) + " ║"
-            print dispStr, '\r',
-            sys.stdout.flush()
+            write(dispStr + '\r')
     except KeyboardInterrupt:
-        print '\n'
+        print('\n')
 
 
 analytic_AI(210, -15)

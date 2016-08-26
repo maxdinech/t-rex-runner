@@ -21,10 +21,9 @@ def naive_AI(jump_dist):
             dispStr += '    ║ ACTUAL: ' + str(score).rjust(4)
             dispStr += '  TOP: ' + str(highscore).rjust(4)
             dispStr += '  AVG: ' + str(average).rjust(4) + " ║"
-            print dispStr, '\r',
-            sys.stdout.flush()
+            write(dispStr + '\r')
     except KeyboardInterrupt:
-        print '\n'
+        print('\n')
     return score
 
 
