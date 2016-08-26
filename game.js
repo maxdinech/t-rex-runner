@@ -199,6 +199,7 @@ Runner.sounds = {
  * @enum {Object}
  */
 Runner.keycodes = {
+  PAUSE: {'27': 1},
   JUMP: {'38': 1, '32': 1},  // Up, spacebar
   DUCK: {'40': 1},  // Down
   RESTART: {'13': 1}  // Enter
@@ -427,7 +428,6 @@ Runner.prototype = {
         this.containerEl.style.width = this.dimensions.WIDTH + 'px';
         this.containerEl.style.height = this.dimensions.HEIGHT + 'px';
         this.distanceMeter.update(0, Math.ceil(this.distanceRan));
-        //this.stop();
       } else {
         this.tRex.draw(0, 0);
       }
@@ -643,6 +643,10 @@ Runner.prototype = {
    * @param {Event} e
    */
   onKeyDown: function(e) {
+    if (Runner.keycodes.PAUSE[e.keyCode]) {
+      return;
+    }
+
     // if (e.target != this.detailsButton) {
       if (!this.crashed && (Runner.keycodes.JUMP[e.keyCode] ||
            e.type == Runner.events.TOUCHSTART || e.type == Runner.events.GAMEPADCONNECTED)) {
@@ -682,6 +686,16 @@ Runner.prototype = {
    * @param {Event} e
    */
   onKeyUp: function(e) {
+    if (Runner.keycodes.PAUSE[e.keyCode]) {
+      if (!this.paused)
+        this.stop();
+      else if (!this.crashed) {
+        this.tRex.reset();
+        this.play();
+      }
+      return;
+    }
+
     var keyCode = String(e.keyCode);
     var isjumpKey = Runner.keycodes.JUMP[keyCode] ||
        e.type == Runner.events.TOUCHEND ||
