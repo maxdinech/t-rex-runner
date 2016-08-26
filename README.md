@@ -61,6 +61,6 @@ In order to run the AI files, the following python packages are required :
 
 And selenium needs its own Chrome/Chromium driver :
 
-Download the lates version here : https://sites.google.com/a/chromium.org/chromedriver/downloads
+Download the latest version here : https://sites.google.com/a/chromium.org/chromedriver/downloads
 
-Then run: `unzip path/to/chromedriver_VERSION.zip && sudo mv path/to/chromedriver /usr/local/bin/chromedriver
+Then run: `unzip path/to/chromedriver_XXX.zip && sudo mv path/to/chromedriver /usr/local/bin/chromedriver`
