@@ -26,12 +26,12 @@ def mutate(indiv):
 
 def crossover(indiv1, indiv2):
     global gen_no
-    return [(indiv1[0]+indiv2[0])/2.,(indiv1[1]+indiv2[1])/2.] + [str(gen_no) + 'co']
+    return [(indiv1[0]+indiv2[0])/2.,(indiv1[1]+indiv2[1])/2.] + [str(gen_no)+'('+indiv1[2]+'+'+indiv2[2]+')']
 
 
 def randIndiv():
     global gen_no
-    return [rd.randint(-40, 40), rd.randint(100, 300)] + [str(gen_no) + 'rd']
+    return [rd.randint(-40, 40), rd.randint(100, 300)] + [str(gen_no)]
 
 
 def randGen(gen_size = 20):
@@ -55,7 +55,7 @@ def evalIndiv(indiv):
     print('       ║                                        ║')
     print('       ║  GEN n°'+ str(gen_no).rjust(2) +'/20          MAX_SCORE: '+ str(max_score).ljust(4) +'  ║')
     print('       ║  IND n°'+ str(ind_no).rjust(2) +'/20      GEN_MAX_SCORE: '+ str(gen_max_score).ljust(4) +'  ║')
-    print('       ║  IND_ID: ' + indiv[2].ljust(29) + ' ║')
+    print('       ║  ID: ' + indiv[2].ljust(34) + '║')
     print('       ╚╦══════════════════════════════════════╦╝')
     while not crashed:
         speed, obs_dist, obs_size, passed, score, crashed = getVars()
