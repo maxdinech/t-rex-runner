@@ -153,7 +153,7 @@ def nextGen(generation):
 def EVOLUTION(gen_number = 20):
     global max_score
     driver.get(url)
-    gen = randGen()
+    gen = randGen(20)
     for i in range(gen_number):
         gen = nextGen(gen)
     return max_score
