@@ -4,29 +4,27 @@ from master import *
 import numpy as np
 import random as rd
 
+
+# ----------------------- DESCRIPTIONS ----------------------- #
+
 # indiv = [k, m, "infos"]
 # (E) : D + W +k*(S-6) < m
+# 1 generation = 20 individuals
 
-# generation = 20 individuals
+# ----------------------- ------------ ----------------------- #
 
+
+
+
+# Variables globales
 mutate_prob = 0.1
-
 max_score = 0
 gen_max_score = 0
 ind_no = 1
 gen_no = 1
 
-def mutate(indiv):
-    global gen_no
-    if rd.random() < mutate_prob:
-        indiv[rd.randint(0,1)] *= (0.5 + rd.random())
-        indiv[2] += ('.' + str(gen_no) + 'm')
-    return indiv
 
-
-def crossover(indiv1, indiv2):
-    global gen_no
-    return [(indiv1[0]+indiv2[0])/2.,(indiv1[1]+indiv2[1])/2.] + [str(gen_no)+'('+indiv1[2]+'+'+indiv2[2]+')']
+# ------------------------ GENERATION ------------------------ #
 
 
 def randIndiv():
@@ -34,8 +32,11 @@ def randIndiv():
     return [rd.randint(-40, 40), rd.randint(100, 300)] + [str(gen_no)]
 
 
-def randGen(gen_size = 20):
+def randGen(gen_size):
     return [randIndiv() for i in range(gen_size)]
+
+
+# ------------------------ EVALUATION ------------------------ #
 
 
 def evalIndiv(indiv):
@@ -81,6 +82,26 @@ def evalGen(generation):
         gen_max_score = max(score, gen_max_score)
         eval_tab += [score]
     return eval_tab
+
+
+# ----------------------- REPRODUCTION ----------------------- #
+# -                     - ET MUTATIONS -                     - #
+
+
+def mutate(indiv):
+    global gen_no
+    if rd.random() < mutate_prob:
+        indiv[rd.randint(0,1)] *= (0.5 + rd.random())
+        indiv[2] += ('.' + str(gen_no) + 'm')
+    return indiv
+
+
+def crossover(indiv1, indiv2):
+    global gen_no
+    return [(indiv1[0]+indiv2[0])/2.,(indiv1[1]+indiv2[1])/2.] + [str(gen_no)+'('+indiv1[2]+'+'+indiv2[2]+')']
+
+
+# ------------------------ EVOLUTION! ------------------------ #
 
 
 def nextGen(generation):
@@ -132,7 +153,7 @@ def nextGen(generation):
 def EVOLUTION(gen_number = 20):
     global max_score
     driver.get(url)
-    gen = randGen()
+    gen = randGen(20)
     for i in range(gen_number):
         gen = nextGen(gen)
     return max_score
