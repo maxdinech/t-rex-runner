@@ -13,6 +13,7 @@ url = 'http://rawgit.com/17maxd/t-rex-runner/master/index.html'
 
 def jump():
     pg.press('space')
+    # driver.send_keys(Keys.ARROW_UP)
 
 
 def getVars():
@@ -34,7 +35,7 @@ def getVars():
     return speed, obs_dist, obs_size, passed, score, crashed
 
 
-def printVars(speed, obs_dist, obs_size, passed):
+def printVars(speed, obs_dist, obs_size):
     dispStr = ""
     dispStr += '   ║ SPEED: ' + str(speed).rjust(5)
     dispStr += '  -  OBS DIST: ' + str(obs_dist).rjust(3)
