@@ -3,7 +3,7 @@
 from master import *
 
 def naive_AI(jump_dist):
-    driver.get('http://localhost/t-rex-runner/')
+    driver.get(url)
     speed, obs_dist, obs_size, passed, score, crashed = getVars()
     print('\n')
     print('    ╔════════════════════════════════════╗')

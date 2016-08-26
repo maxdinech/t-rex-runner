@@ -4,7 +4,7 @@ from master import *
 
 
 def analytic_AI(jump_dist, speed_coef):
-    driver.get('http://localhost/t-rex-runner/')
+    driver.get(url)
     print('\n')
     print('    ╔════════════════════════════════════╗')
     print('    ║T-Rex:       ANALYTIC IA        v2.0║')

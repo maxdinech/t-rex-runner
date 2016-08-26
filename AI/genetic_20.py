@@ -133,7 +133,7 @@ def nextGen(generation):
 
 def EVOLUTION(gen_number = 20):
     global max_score
-    driver.get('http://localhost/t-rex-runner/')
+    driver.get('url')
     gen = randGen()
     for i in range(gen_number):
         gen = nextGen(gen)
