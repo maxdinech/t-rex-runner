@@ -61,11 +61,10 @@ def evalIndiv(indiv):
         if (obs_dist + obs_size + k*(speed - 6) < m) and obs_dist > 40:  # Main equation
             jump()
         dispStr = ""
-        dispStr += '       ║ SCORE: ' + str(score).rjust(4)
+        dispStr += '        ║ SCORE: ' + str(score).rjust(4)
         dispStr += '  SPEED: ' + (str(speed) + "0000")[:5]
         dispStr += '  JMP:' + str(passed).rjust(3) + " ║"
-        print dispStr,
-        print '\b' * (len(dispStr) + 2),
+        print dispStr, '\r',
         sys.stdout.flush()
     return score
 

@@ -18,11 +18,10 @@ def naive_AI(jump_dist):
             if obs_dist < jump_dist or score == 0:
                 jump()
             dispStr = ""
-            dispStr += '   ║ ACTUAL: ' + str(score).rjust(4)
+            dispStr += '    ║ ACTUAL: ' + str(score).rjust(4)
             dispStr += '  TOP: ' + str(highscore).rjust(4)
             dispStr += '  AVG: ' + str(average).rjust(4) + " ║"
-            print dispStr,
-            print '\b' * (len(dispStr) + 2),
+            print dispStr, '\r',
             sys.stdout.flush()
     except KeyboardInterrupt:
         print '\n'

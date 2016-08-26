@@ -8,12 +8,15 @@ from selenium.webdriver.common.keys import Keys
 
 driver = webdriver.Chrome()
 
-url = 'http://rawgit.com/17maxd/t-rex-runner/master/index.html'
-# u = 'http://localhost/t-rex-runner/'
+# l = 'http://rawgit.com/17maxd/t-rex-runner/master/index.html'
+url = 'http://localhost/t-rex-runner/'
 
 def jump():
     pg.press('space')
-    # driver.send_keys(Keys.ARROW_UP)
+    # actions = ActionChains(driver)
+    # actions.send_keys(Keys.ARROW_UP)
+    # actions.perform()
+
 
 
 def getVars():
@@ -27,19 +30,18 @@ def getVars():
         if cookie['name'] == u'obs_size':
             obs_size = int(cookie['value'])
         if cookie['name'] == u'passed':
-            passed = int(cookie['value'])
+            passed_obs = int(cookie['value'])
         if cookie['name'] == u'score':
             score = int(cookie['value'])
         if cookie['name'] == u'crashed':
             crashed = (cookie['value'] == u'true')
-    return speed, obs_dist, obs_size, passed, score, crashed
+    return speed, obs_dist, obs_size, passed_obs, score, crashed
 
 
 def printVars(speed, obs_dist, obs_size):
     dispStr = ""
-    dispStr += '   ║ SPEED: ' + str(speed).rjust(5)
+    dispStr += '    ║ SPEED: ' + str(speed).rjust(5)
     dispStr += '  -  OBS DIST: ' + str(obs_dist).rjust(3)
     dispStr += '  -  OBS SIZE: ' + str(obs_size).rjust(2)
-    print dispStr,
-    print '\b' * (len(dispStr) + 2),
+    print dispStr, '\r',
     sys.stdout.flush()
