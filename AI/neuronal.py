@@ -115,8 +115,8 @@ def evalIndiv(indiv):
     print('       ║                                        ║')
     print('       ║  GEN n°'+ str(gen_no).rjust(2) +'/1000        MAX_SCORE: '+ str(max_score).ljust(4) +'  ║')
     print('       ║  IND n°'+ str(ind_no).rjust(2) +'/20      GEN_MAX_SCORE: '+ str(gen_max_score).ljust(4) +'  ║')
-    print('       ║  MUT: ' + indiv[-1].count('m').ljust(5) + '                            ║')
-    print('       ║  C-O: ' + indiv[-1].count('+').ljust(5) + '                            ║')
+    print('       ║  MUT: ' + str(indiv[-1].count('m')).ljust(5) + '                            ║')
+    print('       ║  C-O: ' + str(indiv[-1].count('+')).ljust(5) + '                            ║')
     print('       ╚╦══════════════════════════════════════╦╝')
     while not crashed:
         speed, obs_dist, obs_size, passed, score, crashed = getVars()
