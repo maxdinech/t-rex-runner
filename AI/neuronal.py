@@ -109,14 +109,14 @@ def evalIndiv(indiv):
     print(chr(27) + "[2J")
     print('\n')
     print('        ╔══════════════════════════════════════╗ ')
-    print('        ║T-Rex:        GENETIC AI          v2.0║ ')
+    print('        ║T-Rex:       NEURAL+GA AI         v3.1║ ')
     print('       ╔╩══════════════════════════════════════╩╗')
     print('       ║  EVALUATING NEURAL NETWORK...          ║')
     print('       ║                                        ║')
-    print('       ║  GEN n°'+ str(gen_no).rjust(2) +'/20          MAX_SCORE: '+ str(max_score).ljust(4) +'  ║')
+    print('       ║  GEN n°'+ str(gen_no).rjust(2) +'/1000        MAX_SCORE: '+ str(max_score).ljust(4) +'  ║')
     print('       ║  IND n°'+ str(ind_no).rjust(2) +'/20      GEN_MAX_SCORE: '+ str(gen_max_score).ljust(4) +'  ║')
-    print('       ║  ID: ' + indiv[-1].ljust(34) + '║')
-    print('       ║                                        ║')
+    print('       ║  MUT: ' + indiv[-1].count('m').ljust(5) + '                            ║')
+    print('       ║  C-O: ' + indiv[-1].count('+').ljust(5) + '                            ║')
     print('       ╚╦══════════════════════════════════════╦╝')
     while not crashed:
         speed, obs_dist, obs_size, passed, score, crashed = getVars()
@@ -188,7 +188,7 @@ def nextGen(generation):
     time.sleep(5)
     # os.system('scrot genetic/tab_gen_'+ str(gen_no) +'.png')
     # Choix des 4 parents
-    eval_tab = [(i - 40)**2 for i in eval_tab]  # On accentue les meilleurs
+    eval_tab = [(i - 30)**2 for i in eval_tab]  # On accentue les meilleurs
     eval_tab_norm = [float(i)/sum(eval_tab) for i in eval_tab]
     parents_id = []
     while len(parents_id) != 5:
@@ -224,4 +224,4 @@ def EVOLUTION(gen_number = 50):
     return max_score
 
 
-EVOLUTION()
+EVOLUTION(1000)
