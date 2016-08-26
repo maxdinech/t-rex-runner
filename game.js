@@ -427,7 +427,7 @@ Runner.prototype = {
         this.containerEl.style.width = this.dimensions.WIDTH + 'px';
         this.containerEl.style.height = this.dimensions.HEIGHT + 'px';
         this.distanceMeter.update(0, Math.ceil(this.distanceRan));
-        this.stop();
+        //this.stop();
       } else {
         this.tRex.draw(0, 0);
       }
@@ -484,14 +484,14 @@ Runner.prototype = {
     this.playCount++;
 
     // Handle tabbing off the page. Pause the current game.
-    document.addEventListener(Runner.events.VISIBILITY,
-          this.onVisibilityChange.bind(this));
+    //document.addEventListener(Runner.events.VISIBILITY,
+    //      this.onVisibilityChange.bind(this));
 
-    window.addEventListener(Runner.events.BLUR,
-          this.onVisibilityChange.bind(this));
+    //window.addEventListener(Runner.events.BLUR,
+    //      this.onVisibilityChange.bind(this));
 
-    window.addEventListener(Runner.events.FOCUS,
-          this.onVisibilityChange.bind(this));
+    //window.addEventListener(Runner.events.FOCUS,
+    //      this.onVisibilityChange.bind(this));
   },
 
   clearCanvas: function() {
@@ -2495,3 +2495,5 @@ Horizon.prototype = {
 
 //start the game
 new Runner('.interstitial-wrapper');
+
+// vim:set et sw=2:
