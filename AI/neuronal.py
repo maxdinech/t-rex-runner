@@ -46,12 +46,8 @@ import random as rd
 
 
 
+
 # ---------------------- NN COMPUTATION ---------------------- #
-
-
-# A decaler ASAP dans master.py
-def crouch():
-    pg.press('down')
 
 
 # fonction de transfert (en tanh)

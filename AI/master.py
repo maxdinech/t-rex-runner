@@ -13,9 +13,11 @@ url = 'http://localhost/t-rex-runner/'
 
 def jump():
     pg.press('space')
-    # actions = ActionChains(driver)
-    # actions.send_keys(Keys.ARROW_UP)
-    # actions.perform()
+
+
+def crouch():
+    pg.press('down')
+
 
 
 def getVars():
