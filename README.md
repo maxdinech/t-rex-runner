@@ -56,6 +56,11 @@ In order to run the AI files, the following python packages are required :
 
 - numpy
 - pyautogui
+- virtualenv
 - selenium
 
-And selenium needs its own Chrome/Chromium driver : see https://sites.google.com/a/chromium.org/chromedriver/downloads
+And selenium needs its own Chrome/Chromium driver :
+
+Download the lates version here : https://sites.google.com/a/chromium.org/chromedriver/downloads
+
+Then run: `unzip path/to/chromedriver_VERSION.zip && sudo mv path/to/chromedriver /usr/local/bin/chromedriver
