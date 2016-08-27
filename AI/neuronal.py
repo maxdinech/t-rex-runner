@@ -50,12 +50,18 @@ import random as rd
 # ---------------------- NN COMPUTATION ---------------------- #
 
 
-# fonction de transfert (en tanh)
+# fonction de transfert (en tanh normalisée)
 def f(z):
-    return np.tanh(z)
+    return (1+np.tanh(z))/2
 
 
 def compute(reseau, speed, dist, size):
+    # Normalisation des entrée
+    dist /= 600
+    size /= 70
+    speed -= 6
+    speed /= 7
+    global is_down_down, is_down_space
     in_cc = []
     for i in range (3):
         in_cc += [reseau[4*i:4*i+4]]
@@ -65,10 +71,21 @@ def compute(reseau, speed, dist, size):
         out_cc += [f(speed*cc[0] + dist*cc[1] + size*cc[2] - cc[3])]
     in_s = reseau[12:16]
     out_s = f(sum([(in_s[i]*out_cc[i]) for i in range(3)]) - in_s[3])
-    if out_s > 0.55:
-        jump()
-    if out_s < 0.45:
-        crouch()
+    
+    if out_s > 0.55 and not is_down_space:
+        pg.keyDown('space')
+        is_down_space = True
+    if out_s < 0.45 and not is_down_down:
+        pg.keyDown('down')
+        is_down_down = True
+    if out_s <= 0.55 and out_s >= 0.45:
+        if is_down_space:
+            pg.keyUp('space')
+            is_down_space = False
+        if is_down_down:
+            pg.keyUp('down')
+            is_down_down = False
+    return out_s
 
 
 # Variables globales
@@ -77,7 +94,8 @@ max_score = 0
 gen_max_score = 0
 ind_no = 1
 gen_no = 1
-
+is_down_down = False
+is_down_space = False
 
 # ------------------------ GENERATION ------------------------ #
 
@@ -96,11 +114,11 @@ def randGen(gen_size):
 
 
 def evalIndiv(indiv):
-    time.sleep(0.3)
-    k = indiv[0]
-    m = indiv[1]
-    time.sleep(0.5)  # Avoids missing evals
-    jump()  # Starts the game
+    global is_down_down, is_down_space
+    is_down_down, is_down_space = False, False
+    while getVars()[5]:
+        jump()  # Starts the game
+    time.sleep(0.3)  # ReducesT-Rex's right shift
     speed, obs_dist, obs_size, passed, score, crashed = getVars()
     print(chr(27) + "[2J")
     print('\n')
@@ -109,23 +127,30 @@ def evalIndiv(indiv):
     print('       ╔╩══════════════════════════════════════╩╗')
     print('       ║  EVALUATING NEURAL NETWORK...          ║')
     print('       ║                                        ║')
-    print('       ║  GEN n°'+ str(gen_no).rjust(2) +'/1000        MAX_SCORE: '+ str(max_score).ljust(4) +'  ║')
+    print('       ║  GEN n°'+ str(gen_no).rjust(4) +'/1000      MAX_SCORE: '+ str(max_score).ljust(4) +'  ║')
     print('       ║  IND n°'+ str(ind_no).rjust(2) +'/20      GEN_MAX_SCORE: '+ str(gen_max_score).ljust(4) +'  ║')
     print('       ║  MUT: ' + str(indiv[-1].count('m')).ljust(5) + '                            ║')
     print('       ║  C-O: ' + str(indiv[-1].count('+')).ljust(5) + '                            ║')
-    print('       ╚╦══════════════════════════════════════╦╝')
+    print('       ╚╦═══════════╦════════════════╦═════════╦╝')
     while not crashed:
         speed, obs_dist, obs_size, passed, score, crashed = getVars()
-        compute(indiv, speed, obs_dist, obs_size)
+        output = compute(indiv, speed, obs_dist, obs_size)
         dispStr = ""
-        dispStr += '        ║ SCORE: ' + str(score).rjust(4)
-        dispStr += '   SPEED: ' + (str(speed) + "0000")[:5]
-        dispStr += '   JMP:' + str(passed).rjust(3) + " ║"
+        dispStr += '        ║SCORE: ' + str(score).rjust(4)
+        dispStr += '║NN OUTPUT: ' + (str(output)+"00")[:5]
+        key = '    '
+        if output > 0.55:
+            key = ' UP '
+        if output < 0.45:
+            key = 'DOWN'
+        dispStr += '║KEY: ' + key + "║"
         write(dispStr + '\r')
     return score
 
 
 def evalGen(generation):
+    driver.get(url)
+    jump()
     global gen_max_score, max_score, ind_no
     eval_tab = []
     ind_no = 0
@@ -146,7 +171,7 @@ def evalGen(generation):
 def mutate(indiv):
     global gen_no
     if rd.random() < mutate_prob:
-        indiv[rd.randint(0,16)] *= (0.5 + rd.random())
+        indiv[rd.randint(0,15)] *= (0.5 + rd.random())
         indiv[-1] += ('.' + str(gen_no) + 'm')
     return indiv
 
@@ -213,7 +238,6 @@ def nextGen(generation):
 
 def EVOLUTION(gen_number = 50):
     global max_score
-    driver.get(url)
     gen = randGen(20)
     for i in range(gen_number):
         gen = nextGen(gen)
