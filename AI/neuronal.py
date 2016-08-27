@@ -72,19 +72,22 @@ def compute(reseau, speed, dist, size):
     in_s = reseau[12:16]
     out_s = f(sum([(in_s[i]*out_cc[i]) for i in range(3)]) - in_s[3])
     
-    if out_s > 0.55 and not is_down_space:
-        pg.keyDown('space')
-        is_down_space = True
-    if out_s < 0.45 and not is_down_down:
-        pg.keyDown('down')
-        is_down_down = True
-    if out_s <= 0.55 and out_s >= 0.45:
-        if is_down_space:
+
+
+
+
+    if out_s <= 0.6 and is_down_space:
             pg.keyUp('space')
             is_down_space = False
-        if is_down_down:
+    if out_s >= 0.4 and is_down_down:
             pg.keyUp('down')
             is_down_down = False
+    if out_s > 0.6 and not is_down_space:
+        pg.keyDown('space')
+        is_down_space = True
+    if out_s < 0.4 and not is_down_down:
+        pg.keyDown('down')
+        is_down_down = True
     return out_s
 
 
@@ -139,9 +142,9 @@ def evalIndiv(indiv):
         dispStr += '        ║SCORE: ' + str(score).rjust(4)
         dispStr += '║NN OUTPUT: ' + (str(output)+"00")[:5]
         key = '    '
-        if output > 0.55:
+        if output > 0.6:
             key = ' UP '
-        if output < 0.45:
+        if output < 0.4:
             key = 'DOWN'
         dispStr += '║KEY: ' + key + "║"
         write(dispStr + '\r')
