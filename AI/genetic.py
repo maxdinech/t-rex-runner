@@ -40,7 +40,6 @@ def randGen(gen_size):
 
 
 def evalIndiv(indiv):
-    time.sleep(0.3)
     k = indiv[0]
     m = indiv[1]
     time.sleep(0.5)  # Avoids missing evals
