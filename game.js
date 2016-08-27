@@ -76,19 +76,6 @@ function Runner(outerContainerId, opt_config) {
 }
 window['Runner'] = Runner;
 
-
-/**
- * Debug infos.
- * @global vars
- */
-cookie.set('speed', 6);
-cookie.set('obs_dist', 600);
-cookie.set('obs_size', 20);
-cookie.set('passed', 0);
-cookie.set('score', 0);
-cookie.set('crashed', false);
-
-
 /**
  * Default game width.
  * @const
@@ -503,8 +490,6 @@ Runner.prototype = {
    * Update the game frame.
    */
   update: function() {
-    
-    cookie.set('speed', this.currentSpeed);
 
     this.drawPending = false;
 
@@ -759,7 +744,6 @@ Runner.prototype = {
 
     this.stop();
     this.crashed = true;
-    cookie.set('crashed', true);
     this.distanceMeter.acheivement = false;
 
     this.tRex.update(100, Trex.status.CRASHED);
@@ -806,7 +790,6 @@ Runner.prototype = {
       this.runningTime = 0;
       this.activated = true;
       this.crashed = false;
-      cookie.set('crashed', false);
       this.distanceRan = 0;
       this.setSpeed(this.config.SPEED);
 
@@ -1797,8 +1780,6 @@ Trex.prototype = {
     this.midair = false;
     this.speedDrop = false;
     this.jumpCount = 0;
-    cookie.set('obs_dist', 600);
-    cookie.set('obs_size', 20);
   }
 };
 
@@ -1968,7 +1949,6 @@ DistanceMeter.prototype = {
     var playSound = false;
 
     distance = this.getActualDistance(distance);
-    cookie.set('score', distance);
 
     // Score has gone beyond the initial digit count.
     if (distance > this.maxScore && this.maxScoreUnits ==
@@ -2057,7 +2037,6 @@ DistanceMeter.prototype = {
   reset: function() {
     this.update(0);
     this.acheivement = false;
-    cookie.set('passed', 0);
   }
 };
 
@@ -2395,15 +2374,7 @@ Horizon.prototype = {
    * @param {number} currentSpeed
    */
   updateObstacles: function(deltaTime, currentSpeed) {
-    // Infos sur l'Obs le plus proche
-    if (this.obstacles.length > 0) {
-      cookie.set('obs_dist', this.obstacles[0].xPos)
-      cookie.set('obs_size', this.obstacles[0].width)
-    } else {
-      cookie.set('obs_dist', 600)
-      cookie.set('obs_size', 20)
-    }
-    
+
     // Obstacles, move to Horizon layer.
     var updatedObstacles = this.obstacles.slice(0);
 
@@ -2414,8 +2385,6 @@ Horizon.prototype = {
       // Clean up existing obstacles.
       if (obstacle.remove) {
         updatedObstacles.shift();
-        cookie.set('passed', parseInt(cookie('passed')) + 1)
-
       }
     }
     this.obstacles = updatedObstacles;

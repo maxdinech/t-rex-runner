@@ -27,23 +27,20 @@
       this.websocket = new WebSocket(websocket_url);
       this.initWebSocket();
 
+      this.last_data = {};
+
       this.infectRunner();
     },
 
     initWebSocket: function() {
       this.websocket.onopen = function() {
         console.log("[WebSocket] connection OK");
-        this.sendMsg({
-          type: 'welcome',
-        });
-        this.sendDatas([
-            {key: 'speed',    value: 6},
-            {key: 'obs_dist', value: 600},
-            {key: 'obs_size', value: 20},
-            {key: 'passed',   value: 0},
-            {key: 'score',    value: 0},
-            {key: 'crashed',  value: false},
-        ]);
+        this.sendData('speed', 6);
+        this.sendData('obs_dist', 600);
+        this.sendData('obs_size', 20);
+        this.sendData('passed', 0);
+        this.sendData('score', 0);
+        this.sendData('crashed', false);
       }.bind(this)
 
       this.websocket.onerror = function(error) {
@@ -81,14 +78,12 @@
           key: key,
           value: value,
         },
-      })
+      });
+      this.last_data[key] = value;
     },
 
-    sendDatas: function(keys_values) {
-      this.sendMsg({
-        type: 'datas',
-        content: keys_values,
-      })
+    getData: function(key) {
+      return this.last_data[key];
     },
 
     sendMsg: function(msg) {
@@ -118,12 +113,70 @@
       var ai = this;
 
 
-
+      // Runner
       runner.update = function() {
+        ai.sendData('speed', this.currentSpeed);
         Runner.prototype.update.call(runner);
-        ai.sendData('data', this.currentSpeed);
       }
-    }
+
+      runner.gameOver = function() {
+        ai.sendData('crashed', true);
+        Runner.prototype.gameOver.call(runner);
+      }
+
+      runner.restart = function() {
+        Runner.prototype.restart.call(runner);
+        ai.sendData('crashed', false);
+      }
+
+      runner.reset = function() {
+        Runner.prototype.reset.call(runner);
+        ai.sendData('obs_dist', 600);
+        ai.sendData('obs_size', 20);
+      }
+
+      // DistanceMeter
+      runner.distanceMeter.update = function(deltaTime, distance) {
+        DistanceMeter.prototype.update.call(runner.distanceMeter, deltaTime, distance);
+        var actual_distance = this.getActualDistance(distance)
+          ai.sendData('score', actual_distance);
+      }
+
+      runner.distanceMeter.reset = function() {
+        DistanceMeter.prototype.update.call(runner.distanceMeter);
+        ai.sendData('passed', 0);
+      }
+
+      // Horizon
+      runner.horizon.updateObstacles = function(deltaTime, currentSpeed) {
+        var nb_obstacles = this.obstacles.length;
+
+        // Infos sur l'Obstacle le plus proche
+        if (nb_obstacles > 0) {
+          ai.sendData('obs_dist', this.obstacles[0].xPos);
+          ai.sendData('obs_size', this.obstacles[0].width);
+        } else {
+          ai.sendData('obs_dist', 600);
+          ai.sendData('obs_size', 20);
+        }
+
+        var first_obs = undefined;
+        if (nb_obstacles > 0)
+          first_obs = this.obstacles[0];
+
+        Horizon.prototype.updateObstacles.call(runner.horizon, deltaTime, currentSpeed);
+
+        // si yavait des obs et qu'il y en a plus
+        // ou si le premier obstacle n'est plus le meme
+        //if ((nb_obstacles > 0 && this.obstacles.length == 0)
+        //    || (first_obs !== this.obstacles[0])) {
+        if (first_obs && first_obs.remove)
+          console.log("first_obs passed !!!!", first_obs);
+          ai.sendData('passed', ai.getData('passed') + 1);
+        }
+      }
+
+    } //!infectRunner
 
   }
 })();
