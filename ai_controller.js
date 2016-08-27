@@ -43,13 +43,15 @@
         this.sendData('crashed', false);
       }.bind(this)
 
-      this.websocket.onerror = function(error) {
-        console.log("[WebSocket]", error);
+      this.websocket.onerror = function(event) {
+        console.log("[WebSocket] Error: ", event.data);
         alert("WebSocket error, AI communication closed");
       }.bind(this)
 
-      this.websocket.onmessage = function(raw_msg) {
-        console.log("[WebSocket] Receive message from AI");
+      this.websocket.onmessage = function(event) {
+        raw_msg = event.data;
+
+        console.log("[WebSocket] Receive message from AI :", raw_msg);
         msg = JSON.parse(raw_msg)
           switch (msg.type) {
             case 'action':
@@ -67,6 +69,9 @@
       switch (action_type) {
         case 'jump':
           this.actionTRexJump();
+          break;
+        case 'stop':
+          this.actionStop();
           break;
       }
     },
@@ -87,8 +92,10 @@
     },
 
     sendMsg: function(msg) {
-      if (this.runner === undefined || this.websocket === undefined) {
-        console.log("Error: Trying to send data when AIController not initialized..");
+      if (this.runner === undefined
+          || this.websocket === undefined
+          || this.websocket.readyState !== this.websocket.OPEN) {
+        //console.log("Error: Trying to send data when AIController not initialized..");
         return;
       }
       this.websocket.send(JSON.stringify(msg));
@@ -106,11 +113,16 @@
       this.runner.onKeyUp(event);
     },
 
+    actionStop: function() {
+      this.runner.stop();
+    },
+
     infectRunner: function() {
       if (this.runner.infected_)
         return;
-      runner.infected_ = true;
+      this.runner.infected_ = true;
       var ai = this;
+      var runner = this.runner;
 
 
       // Runner
@@ -136,19 +148,21 @@
       }
 
       // DistanceMeter
-      runner.distanceMeter.update = function(deltaTime, distance) {
-        DistanceMeter.prototype.update.call(runner.distanceMeter, deltaTime, distance);
-        var actual_distance = this.getActualDistance(distance)
-          ai.sendData('score', actual_distance);
+      var dm = runner.distanceMeter;
+      dm.update = function(deltaTime, distance) {
+        dm.__proto__.update.call(dm, deltaTime, distance);
+        var actual_distance = this.getActualDistance(distance);
+        ai.sendData('score', actual_distance);
       }
 
-      runner.distanceMeter.reset = function() {
-        DistanceMeter.prototype.update.call(runner.distanceMeter);
+      dm.reset = function() {
+        dm.__proto__.update.call(dm);
         ai.sendData('passed', 0);
       }
 
       // Horizon
-      runner.horizon.updateObstacles = function(deltaTime, currentSpeed) {
+      var horiz = runner.horizon;
+      horiz.updateObstacles = function(deltaTime, currentSpeed) {
         var nb_obstacles = this.obstacles.length;
 
         // Infos sur l'Obstacle le plus proche
@@ -164,13 +178,14 @@
         if (nb_obstacles > 0)
           first_obs = this.obstacles[0];
 
-        Horizon.prototype.updateObstacles.call(runner.horizon, deltaTime, currentSpeed);
+        horiz.__proto__.updateObstacles.call(horiz, deltaTime, currentSpeed);
 
         // si yavait des obs et qu'il y en a plus
         // ou si le premier obstacle n'est plus le meme
         //if ((nb_obstacles > 0 && this.obstacles.length == 0)
-        //    || (first_obs !== this.obstacles[0])) {
+        //    || (first_obs !== this.obstacles[0])) 
         if (first_obs && first_obs.remove)
+        {
           console.log("first_obs passed !!!!", first_obs);
           ai.sendData('passed', ai.getData('passed') + 1);
         }
