@@ -1973,22 +1973,6 @@ DistanceMeter.prototype = {
           distance).substr(-this.maxScoreUnits);
       this.digits = distanceStr.split('');
 
-      // Create a string representation of the speed.
-      var speedStr = Math.floor(1000*cookie('speed')).toString()
-      this.digits2 = speedStr.split('');
-
-      // Create a string representation of the next obstacle distance.
-      var speedStr = cookie('obs_dist').toString()
-      this.digits3 = speedStr.split('');
-
-      // Create a string representation of the next obstacle size.
-      var speedStr = cookie('obs_size').toString()
-      this.digits4 = speedStr.split('');
-
-      // Create a string representation of the passed obstacles count.
-      var passedStr = cookie('passed').toString()
-      this.digits5 = passedStr.split('');
-
     } else {
       this.digits  = this.defaultString.split('');
     }
