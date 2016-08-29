@@ -50,17 +50,25 @@ import random as rd
 # ---------------------- NN COMPUTATION ---------------------- #
 
 
-# fonction de transfert (en tanh normalisée)
+# # fonction de transfert (en tanh normalisée)
+# def f(z):
+#     return (1+np.tanh(z))/2
+
+
+# fonction de transfert ReLU
 def f(z):
-    return (1+np.tanh(z))/2
+    if z < 0:
+        return 0
+    return z
 
 
 def compute(reseau, speed, dist, size):
     # Normalisation des entrée
-    dist /= 600
-    size /= 70
-    speed -= 6
-    speed /= 7
+    # dist /= 600
+    dist = 600 - dist
+    # size /= 70
+    # speed -= 6
+    # speed /= 7
     global is_down_down, is_down_space
     in_cc = []
     for i in range (3):
@@ -72,20 +80,16 @@ def compute(reseau, speed, dist, size):
     in_s = reseau[12:16]
     out_s = f(sum([(in_s[i]*out_cc[i]) for i in range(3)]) - in_s[3])
     
-
-
-
-
-    if out_s <= 0.6 and is_down_space:
+    if out_s <= 100 and is_down_space:
             pg.keyUp('space')
             is_down_space = False
-    if out_s >= 0.4 and is_down_down:
+    if out_s >= 20 and is_down_down:
             pg.keyUp('down')
             is_down_down = False
-    if out_s > 0.6 and not is_down_space:
+    if out_s > 100 and not is_down_space:
         pg.keyDown('space')
         is_down_space = True
-    if out_s < 0.4 and not is_down_down:
+    if out_s < 20 and not is_down_down:
         pg.keyDown('down')
         is_down_down = True
     return out_s
@@ -103,10 +107,11 @@ is_down_space = False
 # ------------------------ GENERATION ------------------------ #
 
 
-# Paramètres entre -1 et 1
+# Paramètres rand entre -2 et 2
 def randIndiv():
     global gen_no
-    return [2*rd.random() - 1 for i in range(16)] + [str(gen_no)]
+    # return [4*rd.random() - 2 for i in range(16)] + [str(gen_no)]
+    return [4*rd.random() - 2 for i in range(16)] + [[0, 0]]
 
 
 def randGen(gen_size):
@@ -132,21 +137,21 @@ def evalIndiv(indiv):
     print('       ║                                        ║')
     print('       ║  GEN n°'+ str(gen_no).rjust(4) +'/1000      MAX_SCORE: '+ str(max_score).ljust(4) +'  ║')
     print('       ║  IND n°'+ str(ind_no).rjust(2) +'/20      GEN_MAX_SCORE: '+ str(gen_max_score).ljust(4) +'  ║')
-    print('       ║  MUT: ' + str(indiv[-1].count('m')).ljust(5) + '                            ║')
-    print('       ║  C-O: ' + str(indiv[-1].count('+')).ljust(5) + '                            ║')
-    print('       ╚╦═══════════╦════════════════╦═════════╦╝')
+    print('       ║  MUT: ' + str(indiv[-1][0]).ljust(10) + '                       ║')
+    print('       ║  C-O: ' + str(indiv[-1][1]).ljust(10) + '                       ║')
+    print('       ╚╦═══════════╦═════════════════╦════════╦╝')
     while not crashed:
         speed, obs_dist, obs_size, passed, score, crashed = getVars()
         output = compute(indiv, speed, obs_dist, obs_size)
         dispStr = ""
         dispStr += '        ║SCORE: ' + str(score).rjust(4)
-        dispStr += '║NN OUTPUT: ' + (str(output)+"00")[:5]
+        dispStr += '║NN OUTPUT: ' + (str(output))[:6].ljust(6)
         key = '    '
-        if output > 0.6:
+        if output > 100:
             key = ' UP '
-        if output < 0.4:
+        if output < 20:
             key = 'DOWN'
-        dispStr += '║KEY: ' + key + "║"
+        dispStr += '║KEY:' + key + "║"
         write(dispStr + '\r')
     return score
 
@@ -175,7 +180,7 @@ def mutate(indiv):
     global gen_no
     if rd.random() < mutate_prob:
         indiv[rd.randint(0,15)] *= (0.5 + rd.random())
-        indiv[-1] += ('.' + str(gen_no) + 'm')
+        indiv[-1][0] += 1
     return indiv
 
 
@@ -185,9 +190,11 @@ def crossover(indiv1, indiv2):
     pos = rd.randint(1, 15)
     ordre = rd.randint(1,2)
     if ordre == 1:
-        return indiv1[:pos] + indiv2[pos:-1] + [str(gen_no)+'('+indiv1[-1]+'+'+indiv2[-1]+')']
+    #    return indiv1[:pos] + indiv2[pos:-1] + [str(gen_no)+'('+indiv1[-1]+'+'+indiv2[-1]+')']
+        return indiv1[:pos] + indiv2[pos:-1] + [[indiv1[-1][0], 1+indiv1[-1][1]]]
     else:
-        return indiv2[:pos] + indiv1[pos:-1] + [str(gen_no)+'('+indiv2[-1]+'+'+indiv1[-1]+')']
+    #    return indiv2[:pos] + indiv1[pos:-1] + [str(gen_no)+'('+indiv2[-1]+'+'+indiv1[-1]+')']
+        return indiv2[:pos] + indiv1[pos:-1] + [[indiv1[-1][0], 1+indiv1[-1][1]]]
 
 
 # ------------------------ EVOLUTION! ------------------------ #
@@ -202,7 +209,7 @@ def nextGen(generation):
     print('        ╔══════════════════════════════════════╗ ')
     print('        ║T-Rex:        GENETIC AI          v2.0║ ')
     print('       ╔╩══════════════════════════════════════╩╗')
-    print('       ║             GENERATION n°'+ str(gen_no).ljust(2) +'            ║')
+    print('       ║             GENERATION n°'+ str(gen_no).ljust(4) +'          ║')
     print('       ║ 1 : '+ str_tab[1] +'  6 : '+ str_tab[6] + '  11: '+ str_tab[11] +'  16: '+ str_tab[16] +' ║')
     print('       ║ 2 : '+ str_tab[2] +'  7 : '+ str_tab[7] + '  12: '+ str_tab[12] +'  17: '+ str_tab[17] +' ║')
     print('       ║ 3 : '+ str_tab[3] +'  8 : '+ str_tab[8] + '  13: '+ str_tab[13] +'  18: '+ str_tab[18] +' ║')
