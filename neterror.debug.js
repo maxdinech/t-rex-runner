@@ -2402,7 +2402,7 @@ Horizon.prototype = {
    */
   updateObstacles: function(deltaTime, currentSpeed) {
     // Infos sur l'Obs le plus proche
-    if (this.obstacles.length > 0 && this.obstacles[0].xPos > 60) {
+    if (this.obstacles.length > 0 && this.obstacles[0].xPos > 40) {
       cookie.set('obs_dist', this.obstacles[0].xPos)
       cookie.set('obs_size', this.obstacles[0].width)
     } else if (this.obstacles.length > 1) {
